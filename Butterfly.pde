@@ -1,18 +1,21 @@
 
 class Butterfly extends Object{
-  PImage[] images;
   int idleImageCount;
-  int walkImageCount;
+
   int jumpImageCount;
   int petImageCount;
   int frame;
+  float toX;
+  float toY;  
+  int delayCounter = 0;
+  int delayTime =5;
   
   Butterfly(float xpos, float ypos) {
     super(xpos,ypos);
     int state = 1;
     char direction = 'r'; 
     idleImageCount = 6;
-    walkImageCount = 4;
+
     jumpImageCount = 6;
     petImageCount = 6;
     final int IDLE_STATE = 0;
@@ -20,31 +23,40 @@ class Butterfly extends Object{
     final int JUMP_STATE = 2;
     final int PET_STATE = 3;
     
-    
-    images = new PImage[walkImageCount];
-
-  switch (state) {
-     case IDLE_STATE:
-           break;
-     case WALK_STATE:
-          for (int i = 0; i < walkImageCount; i++) {
-              // Use nf() to number format 'i' into four digits
-            String filename = "rabbitWalk" + nf(i, 4) + ".gif";
-            images[i] = loadImage(filename);
-          }     
-           break;
-     case JUMP_STATE:
-           break;
-     case PET_STATE:
-           break;           
-  }
+    toX = random(SCREEN_W);
+     toY = random(SCREEN_H);
+        
 
   }
 
+ void update(){
+   
+   // walking
+    if (xpos<toX)
+      xpos = xpos + (toX-xpos)*0.05;
+    else if (xpos>toX)
+      xpos = xpos - (xpos-toX)*0.05;
+      
+     if (ypos<toY)
+      ypos = ypos + (toY-ypos)*0.05;
+    else if (ypos>toY)
+      ypos = ypos - (ypos-toY)*0.05;
+      
+      if (abs(xpos-toX)<5 && abs(ypos-toY)<5)
+      {
+            toX = random(SCREEN_W);
+             toY = random(SCREEN_H);
+      }
+ }
+ 
  
   void display() {
-    frame = (frame+1) % walkImageCount;
-    image(images[frame], xpos, ypos);
+    if (delayCounter++ == delayTime)
+    {
+      frame = (frame+1) % flyImageCount;
+      delayCounter = 0;
+    }
+      image(butterflyImages[frame], xpos, ypos);
   }
   
   int getWidth() {
