@@ -17,7 +17,7 @@ class ButterflyNet {
     ypos = 200;
     isHolding = false;
     holdingHands = null;
-    netImage = loadImage("butterflyNet.png");
+    netImage = loadImage("images/butterflyNet.png");
   }
   
   void update (){

@@ -28,7 +28,7 @@ void setup() {
     images = new PImage[walkImageCount];
          for (int i = 0; i < walkImageCount; i++) {
               // Use nf() to number format 'i' into four digits
-            String filename = "bunnyWalk" + nf(i, 4) + ".png";
+            String filename = "images/bunnyWalk" + nf(i, 4) + ".png";
             images[i] = loadImage(filename);
             images[i].resize(100, 100);
           }     
@@ -37,7 +37,7 @@ void setup() {
     butterflyImages = new PImage[flyImageCount];
          for (int i = 0; i < flyImageCount; i++) {
               // Use nf() to number format 'i' into four digits
-            String filename = "butterfly" + nf(i, 4) + ".png";
+            String filename = "images/butterfly" + nf(i, 4) + ".png";
             butterflyImages[i] = loadImage(filename);
           }     
 }

@@ -4,10 +4,10 @@ class Hands {
 
   Hands (){
        rightHandImage = new PImage();
-       rightHandImage = loadImage("rightHand.png");
+       rightHandImage = loadImage("images/rightHand.png");
        rightHandImage.resize(80,0);
        leftHandImage = new PImage();
-       leftHandImage = loadImage("leftHand.png");
+       leftHandImage = loadImage("images/leftHand.png");
        leftHandImage.resize(80,0);
   }
   
