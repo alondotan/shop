@@ -53,13 +53,13 @@ class Butterfly extends Object{
   void display() {
     if (delayCounter++ == delayTime)
     {
-      frame = (frame+1) % flyImageCount;
+      frame = (frame+1) % butterflyFlyImageCount;
       delayCounter = 0;
     }
       image(butterflyImages[frame], xpos, ypos);
   }
   
   int getWidth() {
-    return images[0].width;
+    return butterflyImages[0].width;
   }
 }

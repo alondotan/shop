@@ -60,12 +60,12 @@ class Rabbit extends Object{
  
  
   void display() {
-    frame = (frame+1) % walkImageCount;
+    frame = (frame+1) % rabbitWalkImageCount;
 //    println(frame);
-    image(images[frame], xpos, ypos);
+    image(rabbitWalkingImages[frame], xpos, ypos);
   }
   
   int getWidth() {
-    return images[0].width;
+    return rabbitWalkingImages[0].width;
   }
 }
