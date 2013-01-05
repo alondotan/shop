@@ -1,3 +1,7 @@
+// kinect!!
+//import SimpleOpenNI.*;
+//SimpleOpenNI kinect;
+
 // const
 int SCREEN_W = 1200;
 int SCREEN_H = 800;
@@ -33,6 +37,14 @@ void setup() {
     background(255, 204, 0);
     frameRate(24);
 
+// kinect!!
+/*
+    kinect = new SimpleOpenNI(this);
+    kinect.enableDepth();
+    kinect.enableRGB();
+    kinect.enableUser(SimpleOpenNI.SKEL_PROFILE_ALL);
+    kinect.setMirror(true);
+*/
     mainMenu = new Menu(150, 10);
     hands = new Hands();
     net = new ButterflyNet();
@@ -83,6 +95,8 @@ void setup() {
 }
 
 void draw() {
+    // kinect!!
+    //kinect.update();
     updateAll();
     interactAll();
     displayAll();
@@ -116,7 +130,10 @@ void interactAll() {
 
 void displayAll() {
     background(153, 153, 0);
-//    image(backgroudImg,0,0);
+    image(backgroudImg,0,0);
+// kinect!!
+  //image(kinect.depthImage(), 0, 0); //---&gt; to display as depth image
+
     for(int i = 0; i < objects.size(); i++) {
         Object o = (Object) objects.get(i);
         o.display();
@@ -126,6 +143,30 @@ void displayAll() {
     net.display();
 //    image(clothImg,0,0);
 }
+
+// kinect!!
+/*
+void onNewUser(int userId) {
+  println("start pose detection");
+  kinect.startPoseDetection("Psi", userId);
+}
+
+void onEndCalibration(int userId, boolean successful) {
+  if (successful) {
+    println(" User calibrated !!!");
+    kinect.startTrackingSkeleton(userId);
+  }
+  else {
+    println(" Failed to calibrate user !!!");
+    kinect.startPoseDetection("Psi", userId);
+  }
+}
+void onStartPose(String pose, int userId) {
+  println("Started pose for user");
+  kinect.stopPoseDetection(userId);
+  kinect.requestCalibrationSkeleton(userId, true);
+}
+*/
 
 class Object {
     float xpos, ypos;
