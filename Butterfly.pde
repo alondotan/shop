@@ -7,12 +7,14 @@ class Butterfly extends Object {
     float toY;
     int delayCounter = 0;
     int delayTime = 5;
+    int butterflyColor;
 
-    Butterfly(float xpos, float ypos) {
+    Butterfly(float xpos, float ypos,int c) {
         super(xpos, ypos);
         int state = 1;
         char direction = 'r';
         idleImageCount = 6;
+        butterflyColor = c;
 
         jumpImageCount = 6;
         petImageCount = 6;
@@ -48,10 +50,12 @@ class Butterfly extends Object {
             frame = (frame + 1) % butterflyFlyImageCount;
             delayCounter = 0;
         }
-        image(butterflyImages[frame], xpos, ypos);
+        //println(butterflyColor+ " " +frame + " " + xpos + " " + ypos);
+        //ellipse(xpos, ypos, 30, 30);
+        image(butterflyImages[butterflyColor][frame], xpos, ypos);
     }
 
     int getWidth() {
-        return butterflyImages[0].width;
+        return butterflyImages[butterflyColor][0].width;
     }
 }

@@ -18,10 +18,17 @@ int rabbitWalkImageCount;
 PImage[] rabbitWalkingImages;
 
 int butterflyFlyImageCount;
-PImage[] butterflyImages;
+int butterflyColorCount;
+PImage[][] butterflyImages;
+int greenButterfly = 0;
+int pinkButterfly = 1;
+int purpleButterfly = 2;
+int yellowButterfly = 3;
 
-
+PImage backgroudImg;
+PImage clothImg;
 void setup() {
+
     size(SCREEN_W, SCREEN_H);
     background(255, 204, 0);
     frameRate(24);
@@ -33,27 +40,46 @@ void setup() {
     objects = new ArrayList();
     objects.add(new Rabbit(100, 100));
     objects.add(new Rabbit(200, 200));
-    objects.add(new Butterfly(250, 200));
-    objects.add(new Butterfly(200, 350));
+    objects.add(new Butterfly(250, 200,greenButterfly));
+    objects.add(new Butterfly(200, 350,purpleButterfly));
 
 
     // loading animation pictures
-    rabbitWalkImageCount = 15;
+    rabbitWalkImageCount = 26;
     rabbitWalkingImages = new PImage[rabbitWalkImageCount];
     for(int i = 0; i < rabbitWalkImageCount; i++) {
         // Use nf() to number format 'i' into four digits
-        String filename = "images/bunnyWalk" + nf(i, 4) + ".png";
+        String filename = "images/bunny/bunny" + nf(i, 4) + ".png";
         rabbitWalkingImages[i] = loadImage(filename);
         rabbitWalkingImages[i].resize(100, 100);
     }
 
     butterflyFlyImageCount = 2;
-    butterflyImages = new PImage[butterflyFlyImageCount];
+    butterflyColorCount = 4;
+    butterflyImages = new PImage[butterflyColorCount][butterflyFlyImageCount];
     for(int i = 0; i < butterflyFlyImageCount; i++) {
         // Use nf() to number format 'i' into four digits
-        String filename = "images/butterfly" + nf(i, 4) + ".png";
-        butterflyImages[i] = loadImage(filename);
+  //      String filename = ;
+        butterflyImages[greenButterfly][i] = loadImage("images/butterfly/butterfly_green" + nf(i, 4) + ".png");
+        butterflyImages[greenButterfly][i].resize(500,500);
+  //      filename = ;
+        butterflyImages[pinkButterfly][i] = loadImage("images/butterfly/butterfly_pink" + nf(i, 4) + ".png");
+        butterflyImages[pinkButterfly][i].resize(500,500);
+ //       filename = ;
+        butterflyImages[purpleButterfly][i] = loadImage("images/butterfly/butterfly_purple" + nf(i, 4) + ".png");
+        butterflyImages[purpleButterfly][i].resize(500,500);
+//        String filename = ;
+        butterflyImages[yellowButterfly][i] = loadImage("images/butterfly/butterfly_yellow" + nf(i, 4) + ".png");
+        butterflyImages[yellowButterfly][i].resize(500,500);
     }
+
+    backgroudImg = new PImage();
+    backgroudImg = loadImage("images/backgrounds/background2_day.png");
+    backgroudImg.resize(SCREEN_W,SCREEN_H);
+    clothImg = new PImage();
+    clothImg = loadImage("images/backgrounds/clothes_day.png");
+    clothImg.resize(SCREEN_W,SCREEN_H);
+ 
 }
 
 void draw() {
@@ -90,6 +116,7 @@ void interactAll() {
 
 void displayAll() {
     background(153, 153, 0);
+//    image(backgroudImg,0,0);
     for(int i = 0; i < objects.size(); i++) {
         Object o = (Object) objects.get(i);
         o.display();
@@ -97,6 +124,7 @@ void displayAll() {
     mainMenu.display();
     hands.display();
     net.display();
+//    image(clothImg,0,0);
 }
 
 class Object {
