@@ -19,7 +19,7 @@ class ButterflyNet {
     int handleH = 70;
 
     ButterflyNet() {
-        pos = new Point(100,200);
+        pos = new Point(400,200);
         isHolding = false;
         holdingHands = null;
         for (int i = 0; i<NET_SIZE; i++){
@@ -92,7 +92,9 @@ class ButterflyNet {
     }
 
     boolean checkNetIntersect(float _x, float _y) {
-        println("x: "+_x+ " y: "+_y+" posx: "+pos.xp+" posy: "+pos.yp);
+        _x += 250;
+        _y += 250;
+        // println("x: "+_x+ " y: "+_y+" posx: "+pos.xp+" posy: "+pos.yp);
         return(_x > pos.xp-20 && _x < pos.xp-20 + netW && _y > pos.yp-20 && _y < pos.yp-20 + netH);
     }
 

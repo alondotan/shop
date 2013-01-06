@@ -31,7 +31,7 @@ class Butterfly extends Object {
 
     void update() {
 
-        // walking
+        // walking§
         if(xpos < toX) xpos = xpos + (toX - xpos) * 0.05;
         else if(xpos > toX) xpos = xpos - (xpos - toX) * 0.05;
 
@@ -39,8 +39,8 @@ class Butterfly extends Object {
         else if(ypos > toY) ypos = ypos - (ypos - toY) * 0.05;
 
         if(abs(xpos - toX) < 5 && abs(ypos - toY) < 5) {
-            toX = random(SCREEN_W);
-            toY = random(SCREEN_H);
+            toX = random(SCREEN_W/2)-250;
+            toY = random(SCREEN_H/2)-250;
         }
     }
 

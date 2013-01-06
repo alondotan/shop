@@ -57,6 +57,9 @@ void setup() {
     objectsButterfly = new ArrayList();
     objectsButterfly.add(new Butterfly(250, 200,greenButterfly));
     objectsButterfly.add(new Butterfly(200, 350,purpleButterfly));
+    objectsButterfly.add(new Butterfly(200, 350,purpleButterfly));
+    objectsButterfly.add(new Butterfly(200, 350,purpleButterfly));
+    objectsButterfly.add(new Butterfly(200, 350,purpleButterfly));
 
     // loading animation pictures
     rabbitWalkImageCount = 26;
@@ -65,7 +68,7 @@ void setup() {
         // Use nf() to number format 'i' into four digits
         String filename = "images/bunny/bunny" + nf(i, 4) + ".png";
         rabbitWalkingImages[i] = loadImage(filename);
-        rabbitWalkingImages[i].resize(200, 200);
+        rabbitWalkingImages[i].resize(500, 400);
     }
 
     butterflyFlyImageCount = 2;
@@ -126,8 +129,8 @@ void interactAll() {
         if(net.isInHand()) {
             if(net.checkNetIntersect(o.getXpos(), o.getYpos())) {
                 println("Butterfly in net right hand");
-
                 objectsButterfly.remove(i);
+                objectsButterfly.add(new Butterfly(200, 350,purpleButterfly));
             }
         }
     }
@@ -143,7 +146,7 @@ void displayAll() {
     image(backgroudImg,0,0);
     image(clothImg,0,0);
     // kinect!!
-  image(kinect.depthImage(), 0, 0); //---&gt; to display as depth image
+  //image(kinect.depthImage(), 0, 0); //---&gt; to display as depth image
 
     for(int i = 0; i < objectsRabbit.size(); i++) {
         Object o = (Object) objectsRabbit.get(i);
@@ -154,7 +157,7 @@ void displayAll() {
         o.display();
     }
 
-    mainMenu.display();
+    // mainMenu.display();
     hands.display();
     net.display();
 

@@ -51,16 +51,16 @@ class Hands {
             }
         }
         
-        rXpos = mouseX - 25;
-        rYpos = mouseY - 25;
+        // rXpos = mouseX - 25;
+        // rYpos = mouseY - 25;
 
-        lXpos = rXpos - 300;
-        lYpos = rYpos;
+        // lXpos = rXpos - 300;
+        // lYpos = rYpos;
     }
 
     void display() {
         image(rightHandImage, rXpos, rYpos);
-        image(leftHandImage, lXpos, lYpos);
+        // image(leftHandImage, lXpos, lYpos);
     }
 
     float getRightX() {
