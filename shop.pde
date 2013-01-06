@@ -8,7 +8,8 @@ int SCREEN_H = 800;
 
 
 // all active objects
-ArrayList objects;
+ArrayList objectsRabbit;
+ArrayList objectsButterfly;
 Menu mainMenu;
 Hands hands;
 ButterflyNet net;
@@ -49,12 +50,13 @@ void setup() {
     hands = new Hands();
     net = new ButterflyNet();
 
-    objects = new ArrayList();
-    objects.add(new Rabbit(100, 100));
-    objects.add(new Rabbit(200, 200));
-    objects.add(new Butterfly(250, 200,greenButterfly));
-    objects.add(new Butterfly(200, 350,purpleButterfly));
-
+    objectsRabbit = new ArrayList();
+    objectsRabbit.add(new Rabbit(100, 100));
+    objectsRabbit.add(new Rabbit(200, 200));
+    
+    objectsButterfly = new ArrayList();
+    objectsButterfly.add(new Butterfly(250, 200,greenButterfly));
+    objectsButterfly.add(new Butterfly(200, 350,purpleButterfly));
 
     // loading animation pictures
     rabbitWalkImageCount = 26;
@@ -63,7 +65,7 @@ void setup() {
         // Use nf() to number format 'i' into four digits
         String filename = "images/bunny/bunny" + nf(i, 4) + ".png";
         rabbitWalkingImages[i] = loadImage(filename);
-        rabbitWalkingImages[i].resize(100, 100);
+        rabbitWalkingImages[i].resize(200, 200);
     }
 
     butterflyFlyImageCount = 2;
@@ -103,8 +105,12 @@ void draw() {
 }
 
 void updateAll() {
-    for(int i = 0; i < objects.size(); i++) {
-        Object o = (Object) objects.get(i);
+    for(int i = 0; i < objectsRabbit.size(); i++) {
+        Object o = (Object) objectsRabbit.get(i);
+        o.update();
+    }
+    for(int i = 0; i < objectsButterfly.size(); i++) {
+        Object o = (Object) objectsButterfly.get(i);
         o.update();
     }
     hands.update();
@@ -112,16 +118,20 @@ void updateAll() {
 }
 
 void interactAll() {
+//                    println (objectsButterfly.size());
     // check intersect
-    for(int i = 0; i < objects.size(); i++) {
-        Object o = (Object) objects.get(i);
+    for(int i = 0; i < objectsButterfly.size(); i++) {
+        Object o = (Object) objectsButterfly.get(i);
         if(abs(o.getXpos() - hands.getLeftX()) < 30 && abs(o.getYpos() - hands.getLeftY()) < 30) println("left hand!!");
         if(net.isInHand()) {
             if(net.checkNetIntersect(o.getXpos(), o.getYpos())) {
-                println("in net");
+                println("Butterfly in net right hand");
+
+                objectsButterfly.remove(i);
             }
         }
     }
+
     if(net.checkHendleIntersect(hands.getRightX(), hands.getRightY())) {
         net.setHand(hands);
     }
@@ -131,17 +141,23 @@ void interactAll() {
 void displayAll() {
     background(153, 153, 0);
     image(backgroudImg,0,0);
-// kinect!!
+    image(clothImg,0,0);
+    // kinect!!
   //image(kinect.depthImage(), 0, 0); //---&gt; to display as depth image
 
-    for(int i = 0; i < objects.size(); i++) {
-        Object o = (Object) objects.get(i);
+    for(int i = 0; i < objectsRabbit.size(); i++) {
+        Object o = (Object) objectsRabbit.get(i);
         o.display();
     }
+    for(int i = 0; i < objectsButterfly.size(); i++) {
+        Object o = (Object) objectsButterfly.get(i);
+        o.display();
+    }
+
     mainMenu.display();
     hands.display();
     net.display();
-//    image(clothImg,0,0);
+
 }
 
 // kinect!!

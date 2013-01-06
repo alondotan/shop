@@ -83,7 +83,7 @@ class ButterflyNet {
         ellipse(netPoints[NET_SIZE-1].xp,netPoints[NET_SIZE-1].yp,46,56);
         line(hPoint.xp,hPoint.yp,netPoints[NET_SIZE-1].xp,netPoints[NET_SIZE-1].yp+26);
 
-        //    rect(xpos+50,ypos+10,netW,netH);
+//            rect(pos.xp-20,pos.yp-20,netW,netH);
         //rect(pos.xp+HANDLE_D_X-0.5*handleW,pos.yp+HANDLE_D_Y-0.5*handleH,handleW,handleH);
     }
 
@@ -92,7 +92,8 @@ class ButterflyNet {
     }
 
     boolean checkNetIntersect(float _x, float _y) {
-        return(_x > pos.xp && _x < pos.xp + netW && _y > pos.yp && _y < pos.yp + netH);
+        println("x: "+_x+ " y: "+_y+" posx: "+pos.xp+" posy: "+pos.yp);
+        return(_x > pos.xp-20 && _x < pos.xp-20 + netW && _y > pos.yp-20 && _y < pos.yp-20 + netH);
     }
 
     void setHand(Hands h) {
