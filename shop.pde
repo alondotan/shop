@@ -1,6 +1,6 @@
 // kinect!!
-//import SimpleOpenNI.*;
-//SimpleOpenNI kinect;
+import SimpleOpenNI.*;
+SimpleOpenNI kinect;
 
 // const
 int SCREEN_W = 1200;
@@ -39,13 +39,13 @@ void setup() {
     frameRate(24);
 
 // kinect!!
-/*
+
     kinect = new SimpleOpenNI(this);
     kinect.enableDepth();
     kinect.enableRGB();
     kinect.enableUser(SimpleOpenNI.SKEL_PROFILE_ALL);
     kinect.setMirror(true);
-*/
+
     mainMenu = new Menu(150, 10);
     hands = new Hands();
     net = new ButterflyNet();
@@ -98,7 +98,7 @@ void setup() {
 
 void draw() {
     // kinect!!
-    //kinect.update();
+    kinect.update();
     updateAll();
     interactAll();
     displayAll();
@@ -143,7 +143,7 @@ void displayAll() {
     image(backgroudImg,0,0);
     image(clothImg,0,0);
     // kinect!!
-  //image(kinect.depthImage(), 0, 0); //---&gt; to display as depth image
+  image(kinect.depthImage(), 0, 0); //---&gt; to display as depth image
 
     for(int i = 0; i < objectsRabbit.size(); i++) {
         Object o = (Object) objectsRabbit.get(i);
@@ -161,7 +161,7 @@ void displayAll() {
 }
 
 // kinect!!
-/*
+
 void onNewUser(int userId) {
   println("start pose detection");
   kinect.startPoseDetection("Psi", userId);
@@ -182,7 +182,7 @@ void onStartPose(String pose, int userId) {
   kinect.stopPoseDetection(userId);
   kinect.requestCalibrationSkeleton(userId, true);
 }
-*/
+
 
 class Object {
     float xpos, ypos;

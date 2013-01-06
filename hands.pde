@@ -14,7 +14,7 @@ class Hands {
     }
 
     void update() {
-/*       // kinect !!!
+       // kinect !!!
         IntVector userList = new IntVector();
         kinect.getUsers(userList);
 
@@ -49,7 +49,7 @@ class Hands {
                 }
 
             }
-        }*/
+        }
         
         rXpos = mouseX - 25;
         rYpos = mouseY - 25;
