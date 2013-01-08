@@ -15,7 +15,7 @@ class Hands {
 
     void update() {
        // kinect !!!
-        IntVector userList = new IntVector();
+    /*    IntVector userList = new IntVector();
         kinect.getUsers(userList);
 
         if (userList.size() > 0) {
@@ -50,12 +50,12 @@ class Hands {
 
             }
         }
-        
-        // rXpos = mouseX - 25;
-        // rYpos = mouseY - 25;
+      */  
+        rXpos = mouseX - 25;
+        rYpos = mouseY - 25;
 
-        // lXpos = rXpos - 300;
-        // lYpos = rYpos;
+        lXpos = rXpos - 300;
+        lYpos = rYpos;
     }
 
     void display() {

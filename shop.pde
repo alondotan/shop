@@ -1,11 +1,11 @@
 // kinect!!
-import SimpleOpenNI.*;
-SimpleOpenNI kinect;
+//import SimpleOpenNI.*;
+//SimpleOpenNI kinect;
 
 // const
 int SCREEN_W = 1200;
 int SCREEN_H = 800;
-
+int BUTTERFLY_IMAGE_SIZE = 500;
 
 // all active objects
 ArrayList objectsRabbit;
@@ -14,8 +14,6 @@ Menu mainMenu;
 Hands hands;
 ButterflyNet net;
 
-
-float drag = 30.0;
 
 
 // animation arrays 
@@ -39,13 +37,13 @@ void setup() {
     frameRate(24);
 
 // kinect!!
-
+/*
     kinect = new SimpleOpenNI(this);
     kinect.enableDepth();
     kinect.enableRGB();
     kinect.enableUser(SimpleOpenNI.SKEL_PROFILE_ALL);
     kinect.setMirror(true);
-
+*/
     mainMenu = new Menu(150, 10);
     hands = new Hands();
     net = new ButterflyNet();
@@ -76,18 +74,17 @@ void setup() {
     butterflyImages = new PImage[butterflyColorCount][butterflyFlyImageCount];
     for(int i = 0; i < butterflyFlyImageCount; i++) {
         // Use nf() to number format 'i' into four digits
-  //      String filename = ;
         butterflyImages[greenButterfly][i] = loadImage("images/butterfly/butterfly_green" + nf(i, 4) + ".png");
-        butterflyImages[greenButterfly][i].resize(500,500);
-  //      filename = ;
+        butterflyImages[greenButterfly][i].resize(BUTTERFLY_IMAGE_SIZE,BUTTERFLY_IMAGE_SIZE);
+
         butterflyImages[pinkButterfly][i] = loadImage("images/butterfly/butterfly_pink" + nf(i, 4) + ".png");
-        butterflyImages[pinkButterfly][i].resize(500,500);
- //       filename = ;
+        butterflyImages[pinkButterfly][i].resize(BUTTERFLY_IMAGE_SIZE,BUTTERFLY_IMAGE_SIZE);
+
         butterflyImages[purpleButterfly][i] = loadImage("images/butterfly/butterfly_purple" + nf(i, 4) + ".png");
-        butterflyImages[purpleButterfly][i].resize(500,500);
-//        String filename = ;
+        butterflyImages[purpleButterfly][i].resize(BUTTERFLY_IMAGE_SIZE,BUTTERFLY_IMAGE_SIZE);
+
         butterflyImages[yellowButterfly][i] = loadImage("images/butterfly/butterfly_yellow" + nf(i, 4) + ".png");
-        butterflyImages[yellowButterfly][i].resize(500,500);
+        butterflyImages[yellowButterfly][i].resize(BUTTERFLY_IMAGE_SIZE,BUTTERFLY_IMAGE_SIZE);
     }
 
     backgroudImg = new PImage();
@@ -101,7 +98,8 @@ void setup() {
 
 void draw() {
     // kinect!!
-    kinect.update();
+ //   kinect.update();
+  
     updateAll();
     interactAll();
     displayAll();
@@ -164,7 +162,7 @@ void displayAll() {
 }
 
 // kinect!!
-
+/*
 void onNewUser(int userId) {
   println("start pose detection");
   kinect.startPoseDetection("Psi", userId);
@@ -185,7 +183,7 @@ void onStartPose(String pose, int userId) {
   kinect.stopPoseDetection(userId);
   kinect.requestCalibrationSkeleton(userId, true);
 }
-
+*/
 
 class Object {
     float xpos, ypos;

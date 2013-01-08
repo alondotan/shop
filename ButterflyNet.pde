@@ -1,28 +1,27 @@
 class ButterflyNet {
 
-    int NET_SIZE = 30;
+    int NET_LENGTH = 30;
     int HANDLE_D_X = 0;
     int MAX_HANDLE_D_X = 50;
     int HANDLE_D_Y = 150;
+    int NET_SIZE = 70;
+    int HANDLE_SIZE = 70;
 
     float theta = 0.0;
-    Point [] netPoints = new Point[NET_SIZE];
+    Point [] netPoints = new Point[NET_LENGTH];
     float prevHandle;
 
     Point pos;
     boolean isHolding;
     Hands holdingHands;
     PImage netImage;
-    int netW = 70;
-    int netH = 70;
-    int handleW = 70;
-    int handleH = 70;
+
 
     ButterflyNet() {
         pos = new Point(400,200);
         isHolding = false;
         holdingHands = null;
-        for (int i = 0; i<NET_SIZE; i++){
+        for (int i = 0; i<NET_LENGTH; i++){
             netPoints[i] = new Point(pos.xp,pos.yp);
         }
         prevHandle = pos.xp;
@@ -31,14 +30,14 @@ class ButterflyNet {
     void update() {
         if(holdingHands != null) {
             prevHandle = pos.xp;
-            pos.xp = holdingHands.getRightX()-HANDLE_D_X+ 0.5*handleW;
-            pos.yp = holdingHands.getRightY()-HANDLE_D_Y+ 0.5*handleH;
+            pos.xp = holdingHands.getRightX()-HANDLE_D_X+ 0.5*HANDLE_SIZE;
+            pos.yp = holdingHands.getRightY()-HANDLE_D_Y+ 0.5*HANDLE_SIZE;
         }
     }
 
     void display() {
         if (holdingHands != null){
-            for (int i = 0; i<NET_SIZE-1; i++){
+            for (int i = 0; i<NET_LENGTH-1; i++){
                 netPoints[i].set(netPoints[i+1]);
                 netPoints[i].yp += 1.5;
                 noStroke();
@@ -50,14 +49,12 @@ class ButterflyNet {
         delta = prevHandle - pos.xp;
         if (delta < -MAX_HANDLE_D_X) delta = -MAX_HANDLE_D_X;
         if (delta > MAX_HANDLE_D_X) delta = MAX_HANDLE_D_X;
-  //      if (prevHandle < pos.xp) delta = -MAX_HANDLE_D_X;
-  //      if (prevHandle > pos.xp) delta = MAX_HANDLE_D_X;
 
         Point hPoint = new Point(pos.xp+HANDLE_D_X,pos.yp+HANDLE_D_Y);
-        netPoints[NET_SIZE-1].set(pos);
-        netPoints[NET_SIZE-1].xp += delta;
+        netPoints[NET_LENGTH-1].set(pos);
+        netPoints[NET_LENGTH-1].xp += delta;
 
-        for (int i = NET_SIZE-1; i>0; i--)
+        for (int i = NET_LENGTH-1; i>0; i--)
         {
             if (netPoints[i].xp-netPoints[i-1].xp > 5)
             {
@@ -80,22 +77,24 @@ class ButterflyNet {
         fill(150,150,250);
         stroke(255,100,100);
         strokeWeight(6);
-        ellipse(netPoints[NET_SIZE-1].xp,netPoints[NET_SIZE-1].yp,46,56);
-        line(hPoint.xp,hPoint.yp,netPoints[NET_SIZE-1].xp,netPoints[NET_SIZE-1].yp+26);
+        ellipse(netPoints[NET_LENGTH-1].xp,netPoints[NET_LENGTH-1].yp,46,56);
+        line(hPoint.xp,hPoint.yp,netPoints[NET_LENGTH-1].xp,netPoints[NET_LENGTH-1].yp+26);
 
 //            rect(pos.xp-20,pos.yp-20,netW,netH);
         //rect(pos.xp+HANDLE_D_X-0.5*handleW,pos.yp+HANDLE_D_Y-0.5*handleH,handleW,handleH);
     }
 
     boolean checkHendleIntersect(float _x, float _y) {
-        return(_x > pos.xp + HANDLE_D_X-0.5*handleW && _x < pos.xp + HANDLE_D_X +0.5*handleW && _y > pos.yp + HANDLE_D_Y - 0.5*handleH && _y < pos.yp + HANDLE_D_Y + 0.5*handleH);
+        return(_x > pos.xp + HANDLE_D_X - 0.5*HANDLE_SIZE && _x < pos.xp + HANDLE_D_X + 0.5*HANDLE_SIZE 
+            && _y > pos.yp + HANDLE_D_Y - 0.5*HANDLE_SIZE && _y < pos.yp + HANDLE_D_Y + 0.5*HANDLE_SIZE);
     }
 
     boolean checkNetIntersect(float _x, float _y) {
-        _x += 250;
-        _y += 250;
+        _x += BUTTERFLY_IMAGE_SIZE/2;
+        _y += BUTTERFLY_IMAGE_SIZE/2;
         // println("x: "+_x+ " y: "+_y+" posx: "+pos.xp+" posy: "+pos.yp);
-        return(_x > pos.xp-20 && _x < pos.xp-20 + netW && _y > pos.yp-20 && _y < pos.yp-20 + netH);
+        return(_x > pos.xp-20 && _x < pos.xp-20 + NET_SIZE 
+            && _y > pos.yp-20 && _y < pos.yp-20 + NET_SIZE);
     }
 
     void setHand(Hands h) {
