@@ -1,100 +1,92 @@
 class ButterflyNet {
 
-    int NET_LENGTH = 30;
-    int HANDLE_D_X = 0;
-    int MAX_HANDLE_D_X = 50;
-    int HANDLE_D_Y = 150;
-    int NET_SIZE = 70;
-    int HANDLE_SIZE = 70;
+    int POINT_GAP = 5;
+    int SMALL_END = 20;
+    int NET_LENGTH = 40;
+    int SIZE_FACTOR = 2;
+    int BIG_END = 16 + NET_LENGTH* SIZE_FACTOR;
+    int HANDLE_LEN = 200;
+    int HANDLE_BACK_SPEED = 20;
+    int HANDLE_SIZE = 50;
+    float GRAVITY = 6;
 
-    float theta = 0.0;
     Point [] netPoints = new Point[NET_LENGTH];
-    float prevHandle;
 
-    Point pos;
+    Point handlePos;
     boolean isHolding;
     Hands holdingHands;
-    PImage netImage;
 
 
     ButterflyNet() {
-        pos = new Point(400,200);
         isHolding = false;
         holdingHands = null;
         for (int i = 0; i<NET_LENGTH; i++){
-            netPoints[i] = new Point(pos.xp,pos.yp);
+            netPoints[i] = new Point(400,200+i*POINT_GAP);
         }
-        prevHandle = pos.xp;
+        handlePos = new Point (netPoints[0].xp,netPoints[0].yp+HANDLE_LEN);
     }
 
     void update() {
         if(holdingHands != null) {
-            prevHandle = pos.xp;
-            pos.xp = holdingHands.getRightX()-HANDLE_D_X+ 0.5*HANDLE_SIZE;
-            pos.yp = holdingHands.getRightY()-HANDLE_D_Y+ 0.5*HANDLE_SIZE;
+            handlePos.xp = holdingHands.getRightX();
+            handlePos.yp = holdingHands.getRightY();
+            float handleDist = netPoints[0].dist(handlePos);
+
+            netPoints[0].yp = handlePos.yp - (handlePos.yp - netPoints[0].yp)*HANDLE_LEN/handleDist;
+            netPoints[0].yp -= HANDLE_BACK_SPEED;
+            netPoints[0].xp = handlePos.xp - (handlePos.xp - netPoints[0].xp)*HANDLE_LEN/handleDist;
         }
     }
 
     void display() {
-        if (holdingHands != null){
-            for (int i = 0; i<NET_LENGTH-1; i++){
-                netPoints[i].set(netPoints[i+1]);
-                netPoints[i].yp += 1.5;
-                noStroke();
-                fill(200,200,250);
-                ellipse(netPoints[i].xp,netPoints[i].yp,16+i,16+2*i);
-            }
+        for (int i = 0;i<NET_LENGTH-1; i++){
+          netPoints[i+1].yp += GRAVITY;
+          float tDist = netPoints[i+1].dist(netPoints[i]);
+          float t = POINT_GAP/tDist;
+          netPoints[i+1].xp = netPoints[i].xp - (netPoints[i].xp-netPoints[i+1].xp)*t;
+          netPoints[i+1].yp = netPoints[i].yp - (netPoints[i].yp-netPoints[i+1].yp)*t;      
         }
-        float delta = 0;
-        delta = prevHandle - pos.xp;
-        if (delta < -MAX_HANDLE_D_X) delta = -MAX_HANDLE_D_X;
-        if (delta > MAX_HANDLE_D_X) delta = MAX_HANDLE_D_X;
+        for (int i = NET_LENGTH-1;i>0 ;i--){
 
-        Point hPoint = new Point(pos.xp+HANDLE_D_X,pos.yp+HANDLE_D_Y);
-        netPoints[NET_LENGTH-1].set(pos);
-        netPoints[NET_LENGTH-1].xp += delta;
+          float ellipseX = SMALL_END + (NET_LENGTH-i)*SIZE_FACTOR;//5*(NET_LENGTH-i);
+          float ellipseY = SMALL_END + (NET_LENGTH-i)*SIZE_FACTOR;//5*(NET_LENGTH-i);
+          float nextEllipseY = SMALL_END + (NET_LENGTH-i+1)*SIZE_FACTOR;//5*(NET_LENGTH-i+1);
+          float nextEllipseX = SMALL_END + (NET_LENGTH-i+1)*SIZE_FACTOR;//5*(NET_LENGTH-i+1);
+    //      line(netPoints[i-1].xp, netPoints[i-1].yp,netPoints[i].xp, netPoints[i].yp);
+          stroke(0,0,0);
+          strokeWeight(1);
+          noStroke();
+          fill(200,200,250,80);
+          ellipse(netPoints[i].xp, netPoints[i].yp, ellipseX, ellipseY);
 
-        for (int i = NET_LENGTH-1; i>0; i--)
-        {
-            if (netPoints[i].xp-netPoints[i-1].xp > 5)
-            {
-             netPoints[i-1].xp = netPoints[i].xp - 5;
-            }
-            else if (netPoints[i].xp-netPoints[i-1].xp < -5 )
-            {
-             netPoints[i-1].xp = netPoints[i].xp + 5;
-            }
-            if (netPoints[i].yp-netPoints[i-1].yp > 5)
-            {
-             netPoints[i-1].yp = netPoints[i].yp - 5;
-            }
-            else if (netPoints[i].yp-netPoints[i-1].yp < -5 )
-            {
-             netPoints[i-1].yp = netPoints[i].yp + 5;
-            }
-        }    
 
-        fill(150,150,250);
+    //      line(netPoints[i].xp, netPoints[i].yp+ellipseY/2,netPoints[i].xp, netPoints[i].yp-ellipseY/2);
+          // line(netPoints[i].xp, netPoints[i].yp+ellipseY/2,netPoints[i-1].xp, netPoints[i-1].yp+nextEllipseY/2);
+          // line(netPoints[i].xp, netPoints[i].yp-ellipseY/2,netPoints[i-1].xp, netPoints[i-1].yp-nextEllipseY/2);
+          // line(netPoints[i].xp+ellipseX/2, netPoints[i].yp,netPoints[i-1].xp+nextEllipseX/2, netPoints[i-1].yp);
+          // line(netPoints[i].xp-ellipseX/2, netPoints[i].yp,netPoints[i-1].xp-nextEllipseX/2, netPoints[i-1].yp);
+        }
+
         stroke(255,100,100);
-        strokeWeight(6);
-        ellipse(netPoints[NET_LENGTH-1].xp,netPoints[NET_LENGTH-1].yp,46,56);
-        line(hPoint.xp,hPoint.yp,netPoints[NET_LENGTH-1].xp,netPoints[NET_LENGTH-1].yp+26);
+        strokeWeight(5);
+        fill(150,150,250,90);
+        ellipse(netPoints[0].xp, netPoints[0].yp, BIG_END,BIG_END);//5*NET_LENGTH, 5*NET_LENGTH);
 
+        float handleEndY = handlePos.yp - (handlePos.yp-netPoints[0].yp)*(HANDLE_LEN-(BIG_END/2)+5)/HANDLE_LEN;
+        float handleEndX = handlePos.xp - (handlePos.xp-netPoints[0].xp)*(HANDLE_LEN-(BIG_END/2)+5)/HANDLE_LEN;
+        line(handlePos.xp,handlePos.yp,handleEndX,handleEndY);
 //            rect(pos.xp-20,pos.yp-20,netW,netH);
         //rect(pos.xp+HANDLE_D_X-0.5*handleW,pos.yp+HANDLE_D_Y-0.5*handleH,handleW,handleH);
     }
 
     boolean checkHendleIntersect(float _x, float _y) {
-        return(_x > pos.xp + HANDLE_D_X - 0.5*HANDLE_SIZE && _x < pos.xp + HANDLE_D_X + 0.5*HANDLE_SIZE 
-            && _y > pos.yp + HANDLE_D_Y - 0.5*HANDLE_SIZE && _y < pos.yp + HANDLE_D_Y + 0.5*HANDLE_SIZE);
+        return(_x > handlePos.xp - 0.5*HANDLE_SIZE && _x < handlePos.xp + 0.5*HANDLE_SIZE 
+            && _y > handlePos.yp - 0.5*HANDLE_SIZE && _y < handlePos.yp  + 0.5*HANDLE_SIZE);
     }
 
     boolean checkNetIntersect(float _x, float _y) {
-        _x += BUTTERFLY_IMAGE_SIZE/2;
-        _y += BUTTERFLY_IMAGE_SIZE/2;
-        // println("x: "+_x+ " y: "+_y+" posx: "+pos.xp+" posy: "+pos.yp);
-        return(_x > pos.xp-20 && _x < pos.xp-20 + NET_SIZE 
-            && _y > pos.yp-20 && _y < pos.yp-20 + NET_SIZE);
+        Point butterflyPos = new Point(_x,_y);
+        return(netPoints[0].dist(butterflyPos)<BIG_END/2);
     }
 
     void setHand(Hands h) {

@@ -39,8 +39,8 @@ class Butterfly extends Object {
         else if(ypos > toY) ypos = ypos - (ypos - toY) * 0.05;
 
         if(abs(xpos - toX) < 5 && abs(ypos - toY) < 5) {
-            toX = random(SCREEN_W/2)-BUTTERFLY_IMAGE_SIZE/2;
-            toY = random(SCREEN_H/2)-BUTTERFLY_IMAGE_SIZE/2;
+            toX = random(SCREEN_W/2);
+            toY = random(SCREEN_H*BUTTERFLY_DOMAIN_BOTTOM);
         }
     }
 
@@ -50,7 +50,7 @@ class Butterfly extends Object {
             frame = (frame + 1) % butterflyFlyImageCount;
             delayCounter = 0;
         }
-        image(butterflyImages[butterflyColor][frame], xpos, ypos);
+        image(butterflyImages[butterflyColor][frame], xpos-BUTTERFLY_IMAGE_SIZE/2, ypos-BUTTERFLY_IMAGE_SIZE/2);
     }
 
     int getWidth() {

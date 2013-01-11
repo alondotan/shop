@@ -59,7 +59,7 @@ class Hands {
     }
 
     void display() {
-        image(rightHandImage, rXpos, rYpos);
+        image(rightHandImage, rXpos-40, rYpos-40);
         // image(leftHandImage, lXpos, lYpos);
     }
 

@@ -5,7 +5,12 @@
 // const
 int SCREEN_W = 1200;
 int SCREEN_H = 800;
+float BUTTERFLY_DOMAIN_BOTTOM = 0.3;
+float RABBIT_DOMAIN_TOP = 0.3;
+float RABBIT_DOMAIN_BOTTOM = 0.7;
 int BUTTERFLY_IMAGE_SIZE = 500;
+int RABBIT_IMAGE_W = 500;
+int RABBIT_IMAGE_H = 400;
 
 // all active objects
 ArrayList objectsRabbit;
@@ -17,8 +22,10 @@ ButterflyNet net;
 
 
 // animation arrays 
-int rabbitWalkImageCount;
-PImage[] rabbitWalkingImages;
+int RABBIT_JUMP_IMGS_NUMBER = 14;
+PImage[] rabbitJumpingImages;
+int RABBIT_TURN_HEAD_IMGS_NUMBER = 5;
+PImage[] rabbitTurningHeadImages;
 
 int butterflyFlyImageCount;
 int butterflyColorCount;
@@ -49,9 +56,9 @@ void setup() {
     net = new ButterflyNet();
 
     objectsRabbit = new ArrayList();
-    objectsRabbit.add(new Rabbit(100, 100));
     objectsRabbit.add(new Rabbit(200, 200));
-    
+ //   objectsRabbit.add(new Rabbit(200, 200));
+
     objectsButterfly = new ArrayList();
     objectsButterfly.add(new Butterfly(250, 200,greenButterfly));
     objectsButterfly.add(new Butterfly(200, 350,purpleButterfly));
@@ -60,40 +67,8 @@ void setup() {
     objectsButterfly.add(new Butterfly(200, 350,purpleButterfly));
 
     // loading animation pictures
-    rabbitWalkImageCount = 26;
-    rabbitWalkingImages = new PImage[rabbitWalkImageCount];
-    for(int i = 0; i < rabbitWalkImageCount; i++) {
-        // Use nf() to number format 'i' into four digits
-        String filename = "images/bunny/bunny" + nf(i, 4) + ".png";
-        rabbitWalkingImages[i] = loadImage(filename);
-        rabbitWalkingImages[i].resize(500, 400);
-    }
+    loadAnimation();
 
-    butterflyFlyImageCount = 2;
-    butterflyColorCount = 4;
-    butterflyImages = new PImage[butterflyColorCount][butterflyFlyImageCount];
-    for(int i = 0; i < butterflyFlyImageCount; i++) {
-        // Use nf() to number format 'i' into four digits
-        butterflyImages[greenButterfly][i] = loadImage("images/butterfly/butterfly_green" + nf(i, 4) + ".png");
-        butterflyImages[greenButterfly][i].resize(BUTTERFLY_IMAGE_SIZE,BUTTERFLY_IMAGE_SIZE);
-
-        butterflyImages[pinkButterfly][i] = loadImage("images/butterfly/butterfly_pink" + nf(i, 4) + ".png");
-        butterflyImages[pinkButterfly][i].resize(BUTTERFLY_IMAGE_SIZE,BUTTERFLY_IMAGE_SIZE);
-
-        butterflyImages[purpleButterfly][i] = loadImage("images/butterfly/butterfly_purple" + nf(i, 4) + ".png");
-        butterflyImages[purpleButterfly][i].resize(BUTTERFLY_IMAGE_SIZE,BUTTERFLY_IMAGE_SIZE);
-
-        butterflyImages[yellowButterfly][i] = loadImage("images/butterfly/butterfly_yellow" + nf(i, 4) + ".png");
-        butterflyImages[yellowButterfly][i].resize(BUTTERFLY_IMAGE_SIZE,BUTTERFLY_IMAGE_SIZE);
-    }
-
-    backgroudImg = new PImage();
-    backgroudImg = loadImage("images/backgrounds/background2_day.png");
-    backgroudImg.resize(SCREEN_W,SCREEN_H);
-    clothImg = new PImage();
-    clothImg = loadImage("images/backgrounds/clothes_day.png");
-    clothImg.resize(SCREEN_W,SCREEN_H);
- 
 }
 
 void draw() {
