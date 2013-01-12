@@ -13,6 +13,7 @@ int RABBIT_IMAGE_W = 500;
 int RABBIT_IMAGE_H = 400;
 int BUCKET_SIZE = 110;
 boolean carrotInHand = false;
+int closestRabbit = -1;
 
 // all active objects
 ArrayList objectsRabbit;
@@ -64,8 +65,8 @@ void setup() {
 
     objectsRabbit = new ArrayList();
     objectsRabbit.add(new Rabbit(1000, 200));
-    // objectsRabbit.add(new Rabbit(200, 200));
-    // objectsRabbit.add(new Rabbit(300, 300));
+    objectsRabbit.add(new Rabbit(200, 200));
+    objectsRabbit.add(new Rabbit(300, 300));
 
     objectsButterfly = new ArrayList();
     objectsButterfly.add(new Butterfly(250, 200,greenButterfly));
@@ -123,13 +124,21 @@ void interactAll() {
 
     if(bucket.checkHandIntersect(hands.getRightX(), hands.getRightY())) {
         if (!carrotInHand && !hands.getHasNet()){
-            int choosenRabbit = int(random(objectsRabbit.size()));
-            println("choosenRabbit: "+choosenRabbit);
-            Rabbit o = (Rabbit) objectsRabbit.get(choosenRabbit);
-            o.setRunningAfter(true);
             hands.setHasCarrot(true);
             carrotInHand = true;
         }
+    }
+    if (carrotInHand){
+        int choosenRabbit = findClosestRabbit(hands.getPos());//int(random(objectsRabbit.size()));
+//        println("choosenRabbit: "+choosenRabbit);
+        Rabbit o = (Rabbit) objectsRabbit.get(choosenRabbit);
+        o.setRunningAfter(hands);
+        if (closestRabbit != -1 && closestRabbit != choosenRabbit){
+            o = (Rabbit) objectsRabbit.get(closestRabbit);
+            o.stopRunningAfter();
+        }
+        closestRabbit = choosenRabbit;
+
     }
 
 }
@@ -182,11 +191,26 @@ void onStartPose(String pose, int userId) {
 }
 */
 
+int findClosestRabbit(Point pos){
+    float minDist = SCREEN_H*SCREEN_W;
+    int minPos = -1;
+   // println("minDist: "+minDist);
+    for(int i = 0; i < objectsRabbit.size(); i++) {
+        Rabbit r = (Rabbit) objectsRabbit.get(i);
+ //       println (r.getPos().xp + " " + r.getPos().yp + " " + pos.xp + "-" + pos.yp + 
+     //       " dist: " + r.getPos().dist(pos));
+        if (minDist > r.getPos().dist(pos)){
+            minDist = r.getPos().dist(pos);
+            minPos = i;
+        }
+    }
+    return minPos;
+}
+
 class Object {
-    float xpos, ypos;
+    Point pos;
     Object(float xpos, float ypos) {
-        this.xpos = xpos;
-        this.ypos = ypos;
+        pos = new Point (xpos,ypos);
     }
     void update() {}
     void display() {}
@@ -194,9 +218,13 @@ class Object {
         return 0;
     }
     float getXpos() {
-        return xpos;
+        return pos.xp;
     }
     float getYpos() {
-        return ypos;
+        return pos.yp;
+    }
+
+    Point getPos(){
+        return pos;
     }
 }

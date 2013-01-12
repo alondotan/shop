@@ -9,8 +9,8 @@ class Butterfly extends Object {
     int delayTime = 5;
     int butterflyColor;
 
-    Butterfly(float xpos, float ypos,int c) {
-        super(xpos, ypos);
+    Butterfly(float xp, float yp,int c) {
+        super(xp, yp);
         int state = 1;
         char direction = 'r';
         idleImageCount = 6;
@@ -32,13 +32,13 @@ class Butterfly extends Object {
     void update() {
 
         // walking§
-        if(xpos < toX) xpos = xpos + (toX - xpos) * 0.05;
-        else if(xpos > toX) xpos = xpos - (xpos - toX) * 0.05;
+        if(pos.xp < toX) pos.xp = pos.xp + (toX - pos.xp) * 0.05;
+        else if(pos.xp > toX) pos.xp = pos.xp - (pos.xp - toX) * 0.05;
 
-        if(ypos < toY) ypos = ypos + (toY - ypos) * 0.05;
-        else if(ypos > toY) ypos = ypos - (ypos - toY) * 0.05;
+        if(pos.yp < toY) pos.yp = pos.yp + (toY - pos.yp) * 0.05;
+        else if(pos.yp > toY) pos.yp = pos.yp - (pos.yp - toY) * 0.05;
 
-        if(abs(xpos - toX) < 5 && abs(ypos - toY) < 5) {
+        if(abs(pos.xp - toX) < 5 && abs(pos.yp - toY) < 5) {
             toX = random(SCREEN_W/2);
             toY = random(SCREEN_H*BUTTERFLY_DOMAIN_BOTTOM);
         }
@@ -50,7 +50,7 @@ class Butterfly extends Object {
             frame = (frame + 1) % butterflyFlyImageCount;
             delayCounter = 0;
         }
-        image(butterflyImages[butterflyColor][frame], xpos-BUTTERFLY_IMAGE_SIZE/2, ypos-BUTTERFLY_IMAGE_SIZE/2);
+        image(butterflyImages[butterflyColor][frame], pos.xp-BUTTERFLY_IMAGE_SIZE/2, pos.yp-BUTTERFLY_IMAGE_SIZE/2);
     }
 
     int getWidth() {

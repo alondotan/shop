@@ -2,7 +2,9 @@ class Rabbit extends Object {
     final int IDLE_STATE = 0;
     final int JUMP_STATE = 1;
     final int TURN_STATE = 2;
-    final int PET_STATE = 3;
+    final int GOTO_CARROT_STATE = 3;
+    final int EAT_CARROT_STATE = 4;
+
     final int IDLE_STATE_TIME = 20;
     final int JUMMPING_DIST = 100;
 
@@ -18,6 +20,7 @@ class Rabbit extends Object {
     float toY;
     int state;
     boolean turnToFront = false;
+    Hands afterHand;
 //    int rabbitWalkImageCount;
     int idleStateCount;
     char direction;
@@ -49,10 +52,10 @@ class Rabbit extends Object {
                     int val = (int) random(2);
                     println("val: "+val); 
                     if (val>0){
-                        println("RRRR");
+                        direction = 'r';
                     }
                     else {
-                        println("LLLLL");
+                        direction = 'l';
                     }
                 }
                 break;
@@ -67,7 +70,10 @@ class Rabbit extends Object {
                 }
                 else {
                     jumpDist = float(JUMMPING_DIST/RABBIT_JUMP_IMGS_NUMBER);//*rabbitWalkImageCount;
-                    xpos -= jumpDist; //
+                    if (direction == 'r') 
+                        pos.xp -= jumpDist;
+                    else 
+                        pos.xp += jumpDist;
                 }
                 break;
             case TURN_STATE:
@@ -85,7 +91,28 @@ class Rabbit extends Object {
                 }
 
                 break;
-            case PET_STATE:
+            case GOTO_CARROT_STATE:
+                jumpDist = float(JUMMPING_DIST/RABBIT_JUMP_IMGS_NUMBER);
+                boolean isEating = false;
+                Point handPoint = afterHand.getPos();
+                if (handPoint.xp > pos.xp){
+                    pos.xp += jumpDist;
+                    isEating = (pos.xp >= handPoint.xp);
+                }
+                else if (pos.xp > handPoint.xp){
+                    pos.xp -= jumpDist;
+                    isEating = (pos.xp <= handPoint.xp);
+                }
+                else{
+                    isEating = true;
+                }
+                if (isEating){
+                    hands.setHasCarrot(false);
+                    stopRunningAfter();
+                    println("EAT!!!");
+                    carrotInHand = false;
+                    runningAfterCarrot = false;
+                }
                 break;
             }
 
@@ -95,20 +122,29 @@ class Rabbit extends Object {
     void display() {
         switch(state) {
             case IDLE_STATE:
+                image(rabbitTurningHeadImages[0], pos.xp - RABBIT_IMAGE_W * 0.5, pos.yp - RABBIT_IMAGE_H * 0.5);
                 break;
             case JUMP_STATE:
+            case GOTO_CARROT_STATE:
                 frame = (frame + 1) % RABBIT_JUMP_IMGS_NUMBER;
-            //    println(frame);
-                image(rabbitJumpingImages[frame], xpos - RABBIT_IMAGE_W * 0.5, ypos - RABBIT_IMAGE_H * 0.5);
+                pushMatrix();
+                if (direction=='l'){
+                    scale(-1,1);
+                    image(rabbitJumpingImages[frame], -(pos.xp + RABBIT_IMAGE_W * 0.5), pos.yp - RABBIT_IMAGE_H * 0.5);
+                }
+                else {
+                    image(rabbitJumpingImages[frame], pos.xp - RABBIT_IMAGE_W * 0.5, pos.yp - RABBIT_IMAGE_H * 0.5);   
+                }
+                popMatrix();
                 break;
             case TURN_STATE:
                 frame = (frame + 1) % RABBIT_TURN_HEAD_IMGS_NUMBER;
             //    println(frame);
-                image(rabbitTurningHeadImages[frame], xpos - RABBIT_IMAGE_W * 0.5, ypos - RABBIT_IMAGE_H * 0.5);
+                image(rabbitTurningHeadImages[frame], pos.xp - RABBIT_IMAGE_W * 0.5, pos.yp - RABBIT_IMAGE_H * 0.5);
                 break;
         }
         if (runningAfterCarrot){
-            ellipse(xpos, ypos, 10, 10);
+            ellipse(pos.xp, pos.yp, 10, 10);
         }
 
     }
@@ -117,7 +153,20 @@ class Rabbit extends Object {
         return rabbitJumpingImages[0].width;
     }
 
-    void setRunningAfter(boolean val){
-        runningAfterCarrot = val;
+    void setRunningAfter(Hands afterHand){
+        runningAfterCarrot = true;
+        this.afterHand = afterHand;
+        state = GOTO_CARROT_STATE;
+        if (afterHand.getPos().xp > pos.xp)
+            direction = 'l';
+        else 
+            direction = 'r';   
+    }
+ 
+    void stopRunningAfter(){
+        runningAfterCarrot = false;   
+        state = IDLE_STATE;
+        afterHand = null; 
+        currStateCount = IDLE_STATE_TIME;
     }
 }

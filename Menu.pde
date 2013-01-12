@@ -6,7 +6,7 @@ class Menu extends Object {
 	}
 
 	void display() {
-		rect(xpos, ypos, 50, 150);
+		rect(pos.xp, pos.yp, 50, 150);
 	}
 
 	int getWidth() {

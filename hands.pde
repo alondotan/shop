@@ -69,6 +69,10 @@ class Hands {
         return pos.yp;
     }
 
+    Point getPos(){
+        return pos;
+    }
+    
     void setHasNet(boolean val){
         hasNet = val;
     }
