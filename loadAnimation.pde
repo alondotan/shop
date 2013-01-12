@@ -38,5 +38,19 @@ void loadAnimation(){
     clothImg = new PImage();
     clothImg = loadImage("images/backgrounds/clothes_day.png");
     clothImg.resize(SCREEN_W,SCREEN_H);
- 
+
+	bucketImg = new PImage();
+	bucketImg = loadImage("images/carrot/bucketstitch.png");
+	bucketImg.resize(BUCKET_SIZE,BUCKET_SIZE);
+
+	carrotImg = new PImage();
+	carrotImg = loadImage("images/carrot/carrotstitch.png");
+    carrotImg.resize(100,0);
+
+    rightHandImage = new PImage();
+    rightHandImage = loadImage("images/orb.png");
+    rightHandImage.resize(80, 0);
+    leftHandImage = new PImage();
+    leftHandImage = loadImage("images/orb.png");
+    leftHandImage.resize(80, 0);
 }

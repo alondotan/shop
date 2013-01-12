@@ -1,16 +1,13 @@
 
 class Hands {
-    PImage rightHandImage, leftHandImage;
-    float rXpos, rYpos, lXpos, lYpos;
-
+    Point pos;
+//    float rXpos, rYpos, lXpos, lYpos;
+    boolean hasCarrot;
+    boolean hasNet; 
     Hands() {
-        rightHandImage = new PImage();
-        rightHandImage = loadImage("images/rightHand.png");
-        rightHandImage.resize(80, 0);
-        leftHandImage = new PImage();
-        leftHandImage = loadImage("images/leftHand.png");
-        leftHandImage.resize(80, 0);
-
+        pos = new Point (0,0);
+        hasCarrot = false;
+        hasNet = false;
     }
 
     void update() {
@@ -31,8 +28,8 @@ class Hands {
                 else{
                     PVector convertedRightHand = new PVector();
                     kinect.convertRealWorldToProjective(rightHandVec, convertedRightHand);
-                    rXpos = convertedRightHand.x - 25;
-                    rYpos = convertedRightHand.y - 25;
+                    pos.xp = convertedRightHand.x - 25;
+                    pos.yp = convertedRightHand.y - 25;
 
                 }
                 PVector leftHandVec = new PVector();
@@ -43,39 +40,47 @@ class Hands {
                 else{
                     PVector convertedLeftHand = new PVector();
                     kinect.convertRealWorldToProjective(leftHandVec, convertedLeftHand);
-                    lXpos = convertedLeftHand.x - 25;
-                    lYpos = convertedLeftHand.y - 25;
+                    pos.xp = convertedLeftHand.x - 25;
+                    pos.yp = convertedLeftHand.y - 25;
 
                 }
 
             }
         }
       */  
-        rXpos = mouseX - 25;
-        rYpos = mouseY - 25;
+        pos.xp = mouseX;
+        pos.yp = mouseY;
 
-        lXpos = rXpos - 300;
-        lYpos = rYpos;
     }
 
     void display() {
-        image(rightHandImage, rXpos-40, rYpos-40);
+        image(rightHandImage, pos.xp-rightHandImage.width/2, pos.yp-rightHandImage.width/2);
         // image(leftHandImage, lXpos, lYpos);
+        if (hasCarrot){
+            image(carrotImg, pos.xp-carrotImg.width/2, pos.yp-carrotImg.width/2);
+        }
     }
 
     float getRightX() {
-        return rXpos;
+        return pos.xp;
     }
 
     float getRightY() {
-        return rYpos;
+        return pos.yp;
     }
 
-    float getLeftX() {
-        return lXpos;
+    void setHasNet(boolean val){
+        hasNet = val;
     }
 
-    float getLeftY() {
-        return lYpos;
+    boolean getHasNet(){
+        return hasNet;
+    }
+        void setHasCarrot(boolean val){
+        hasCarrot = val;
+    }
+
+    boolean getHasCarrot(){
+        return hasCarrot;
     }
 }

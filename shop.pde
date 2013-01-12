@@ -11,6 +11,8 @@ float RABBIT_DOMAIN_BOTTOM = 0.7;
 int BUTTERFLY_IMAGE_SIZE = 500;
 int RABBIT_IMAGE_W = 500;
 int RABBIT_IMAGE_H = 400;
+int BUCKET_SIZE = 110;
+boolean carrotInHand = false;
 
 // all active objects
 ArrayList objectsRabbit;
@@ -18,7 +20,7 @@ ArrayList objectsButterfly;
 Menu mainMenu;
 Hands hands;
 ButterflyNet net;
-
+Bucket bucket;
 
 
 // animation arrays 
@@ -37,6 +39,10 @@ int yellowButterfly = 3;
 
 PImage backgroudImg;
 PImage clothImg;
+PImage bucketImg;
+PImage carrotImg;
+PImage rightHandImage, leftHandImage;
+
 void setup() {
 
     size(SCREEN_W, SCREEN_H);
@@ -54,10 +60,12 @@ void setup() {
     mainMenu = new Menu(150, 10);
     hands = new Hands();
     net = new ButterflyNet();
+    bucket = new Bucket();
 
     objectsRabbit = new ArrayList();
-    objectsRabbit.add(new Rabbit(200, 200));
- //   objectsRabbit.add(new Rabbit(200, 200));
+    objectsRabbit.add(new Rabbit(1000, 200));
+    // objectsRabbit.add(new Rabbit(200, 200));
+    // objectsRabbit.add(new Rabbit(300, 300));
 
     objectsButterfly = new ArrayList();
     objectsButterfly.add(new Butterfly(250, 200,greenButterfly));
@@ -98,7 +106,7 @@ void interactAll() {
     // check intersect
     for(int i = 0; i < objectsButterfly.size(); i++) {
         Object o = (Object) objectsButterfly.get(i);
-        if(abs(o.getXpos() - hands.getLeftX()) < 30 && abs(o.getYpos() - hands.getLeftY()) < 30) println("left hand!!");
+//        if(abs(o.getXpos() - hands.getLeftX()) < 30 && abs(o.getYpos() - hands.getLeftY()) < 30) println("left hand!!");
         if(net.isInHand()) {
             if(net.checkNetIntersect(o.getXpos(), o.getYpos())) {
                 println("Butterfly in net right hand");
@@ -110,6 +118,18 @@ void interactAll() {
 
     if(net.checkHendleIntersect(hands.getRightX(), hands.getRightY())) {
         net.setHand(hands);
+        hands.setHasNet(true);
+    }
+
+    if(bucket.checkHandIntersect(hands.getRightX(), hands.getRightY())) {
+        if (!carrotInHand && !hands.getHasNet()){
+            int choosenRabbit = int(random(objectsRabbit.size()));
+            println("choosenRabbit: "+choosenRabbit);
+            Rabbit o = (Rabbit) objectsRabbit.get(choosenRabbit);
+            o.setRunningAfter(true);
+            hands.setHasCarrot(true);
+            carrotInHand = true;
+        }
     }
 
 }
@@ -130,9 +150,11 @@ void displayAll() {
         o.display();
     }
 
+
     // mainMenu.display();
     hands.display();
     net.display();
+    bucket.display();
 
 }
 
